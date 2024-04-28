@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .alert-message {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Display messages -->
+        {% for message in messages %}
+        <div id="alert-message" class="alert alert-secondary" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        <h1 class="mb-4">Add Employee</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <input type="text" id="address" name="address" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="phone_no" class="form-label">Phone Number:</label>
+                <input type="text" id="phone_no" name="phone_no" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="position" class="form-label">Position:</label>
+                <select id="position" name="position" class="form-select">
+                    <option value="Manager">Manager</option>
+                    <option value="Software Developer">Software Developer</option>
+                    <option value="Project Leader">Project Leader</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="salary" class="form-label">Salary:</label>
+                <input type="text" id="salary" name="salary" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="join_date" class="form-label">Join Date:</label>
+                <input type="date" id="join_date" name="join_date" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="company" class="form-label">Company:</label>
+                <select id="company" name="company" class="form-select">
+                    {% for company in companies %}
+                        <option value="{{ company.pk }}">{{ company.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'employee_list' %}" class="btn btn-secondary">Employees</a>
+            </div>
+        </form>
+    </div> 
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            // Validate other fields here...
+
+            // Check if any field is empty
+            if (!name || !email) {
+                alert("Please fill in all fields.");
+                return false; // Prevent form submission if validation fails
+            }
+
+            // Check if email is valid
+            if (!isValidEmail(email)) {
+                alert("Please enter a valid email address.");
+                return false; // Prevent form submission if validation fails
+            }
+
+            // All validations passed
+            return true;
+        }
+
+        function isValidEmail(email) {
+            // Basic email validation
+            var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // Function to hide alert message after 3 seconds
+        window.onload = function() {
+            setTimeout(function() {
+                var alertMessage = document.getElementById('alert-message');
+                if (alertMessage) {
+                    alertMessage.style.display = 'none'; // Initially hide the alert message
+                }
+            }, 3000);
+        };
+        
+    </script>  
+</body>
+</html>
